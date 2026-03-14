@@ -1,13 +1,26 @@
-<div class="card h-100 shadow-sm">
-    <img [src]="user()?.image" class="card-img-top" [alt]="user()?.first_name">
+<div class="card h-100 shadow-sm border-0 custom-card">
+    <img [src]="user()?.image" class="rounded-circle w-50 d-block mx-auto mt-4 shadow-sm" [alt]="user()?.first_name">
     
-    <div class="card-body text-center">
-        <h5 class="card-title">{{ user()?.first_name }} {{ user()?.last_name }}</h5>
-        <p class="card-text text-muted">{{ user()?.email }}</p>
+    <div class="card-body text-center d-flex flex-column justify-content-between">
+        <h5 class="card-title fw-bold text-secondary mt-2">{{ user()?.first_name }} {{ user()?.last_name }}</h5>
         
-        <!-- Enlace dinámico al detalle usando el ID -->
-        <a [routerLink]="['/user-view', user()?._id]" class="btn btn-primary">
-            Ver Detalle
-        </a>
+        <div class="d-flex justify-content-around mt-4 pt-3 border-top border-secondary border-opacity-25">
+            
+            <a [routerLink]="['/user', user()?.id]" class="card-action">
+                <span class="icon">🔍</span>
+                <small>Ver detalle</small>
+            </a>
+
+            <a [routerLink]="['/updateuser', user()?.id]" class="card-action">
+                <span class="icon">🔄</span>
+                <small>Actualizar</small>
+            </a>
+
+            <a class="card-action">
+                <span class="icon">🗑️</span>
+                <small>Borrar</small>
+            </a>
+
+        </div>
     </div>
 </div>

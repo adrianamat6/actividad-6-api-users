@@ -1,0 +1,42 @@
+/* El gris suave de la tarjeta */
+.custom-card {
+    background-color: #f8f9fa; /* Gris muy clarito */
+    transition: all 0.3s ease;
+}
+
+/* Línea divisoria suave */
+.border-top {
+    border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Estilo para los iconos/botones */
+.card-action {
+    text-decoration: none;
+    color: #6c757d; 
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-action .icon {
+    font-size: 1.5rem;
+    margin-bottom: 2px;
+}
+
+.card-action small {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Efectos al pasar el ratón */
+.card-action:hover {
+    color: #0d6efd; /* Cambia a azul al pasar por encima */
+    transform: translateY(-2px);
+}
+
+.delete-action:hover {
+    color: #dc3545; /* Pero el de borrar cambia a rojo */
+}
