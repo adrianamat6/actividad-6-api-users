@@ -17,9 +17,23 @@ export class UsersService {
   return await lastValueFrom(this.httpClient.get<IUserResponse>(this.baseUrl));
   }; 
 
-  async getUserById(id:string): Promise <IUser>{
-    return await lastValueFrom(this.httpClient.get<IUser>(`${this.baseUrl}/${id}`)); 
+  async getUserById(id:string): Promise <IUser | undefined >{
+    try{
+      return await lastValueFrom(this.httpClient.get<IUser>(`${this.baseUrl}/${id}`)); 
+    }catch(error){
+      console.error(`Error  al obtener el usuario con id ${id}:`, error);
+      return undefined; 
+    }
   }
+
+  async deleteUserById(id: string): Promise<any> {
+    try{
+          return await lastValueFrom(this.httpClient.delete<any>(`${this.baseUrl}/${id}`));
+    }catch(error){
+      console.error(`Error técnico al eliminar el usuario con id ${id}:`, error);
+    }
+}
+
 
 }
 

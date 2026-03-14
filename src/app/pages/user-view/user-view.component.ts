@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { UsersService } from '../../services/users';
 import { IUser } from '../../interfaces/iuser.interface';
 import { signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
 
@@ -18,45 +18,77 @@ export class UserViewComponent {
   // Recolector de la ruta dinamica
   id = input<string>();  
  
+  // El objeto usuario que nos envia el servicio
   user = signal<IUser | null>(null);  
+
+  // El servicio 
   userSevice = inject(UsersService); 
 
-  async ngOnInit() {
-    // 1. Recogemos el valor del ID en una constante
-    const userId = this.id(); 
+  // Importamos tambien el router para redireccionar
+  private router = inject(Router); 
 
-    // 2. Comprobamos si existe 
-    if (userId) {
+
+  async ngOnInit() {
+      const userId = this.id();
+      
+      if (!userId) return;
+
       try {
         const response = await this.userSevice.getUserById(userId);
-        this.user.set(response); 
-        console.log('Usuario cargado:', this.user()); 
+        // Como el servicio puede devolver undefined por el try-catch, comprobamos
+        if (response) {
+          this.user.set(response);
+        }
       } catch (error) {
-        console.error('Error al obtener el detalle del usuario', error); 
+        console.error('Error al obtener el detalle del usuario', error);
       }
-    } else {
-      // Opcional: Manejar el caso de que no venga ID
-      console.warn('No se ha recibido ningún ID en la ruta');
+    }
+
+
+  async btnBorrarUsuario() {
+    const userId = this.id();
+    const nombre = this.user()?.first_name || 'este usuario';
+
+    // Si no hay ID, salimos de la función
+    if (!userId) return;
+
+    // Llamamos a la sub-función de confirmación
+    const confirmacion = await this.pedirConfirmacionBorrado(nombre);
+
+    if (confirmacion) {
+      await this.ejecutarBorrado(userId);
     }
   }
 
+  // Función responsable solo de la UI (SweetAlert)
+  private async pedirConfirmacionBorrado(nombre: string): Promise<boolean> {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: `Vas a eliminar al usuario ${nombre}.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+    return result.isConfirmed;
+  }
 
-async btnBorrarUsuario() {
+  // Función responsable de llamar al servicio y redireccionar
+  private async ejecutarBorrado(id: string) {
+    try {
+     const response =  await this.userSevice.deleteUserById(id);
 
-  // Obtenemos el nombre para personalizar el mensaje (usando signal si aplica)
-  const nombreUsuario = this.user()?.first_name;
-
-  // 3. Lanzamos el popup de confirmación de SweetAlert2
-  const result = await Swal.fire({
-    title: '¿Estás seguro?',
-    text: `Vas a eliminar al usuario ${nombreUsuario}.`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33', // Color rojo para peligro
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Sí, eliminar',
-    cancelButtonText: 'Cancelar'
-  });
-}
-
+      console.log('Respuesta de la API al borrar:',response)
+      
+      // Feedback de éxito
+      await Swal.fire('¡Eliminado!', 'El usuario ha sido borrado con éxito.', 'success');
+      
+      // Redirección
+      this.router.navigate(['/home']);
+    } catch (error) {
+      Swal.fire('Error', 'No se ha podido borrar el usuario', 'error');
+    }
+  }
 }
