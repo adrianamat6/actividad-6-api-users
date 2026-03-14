@@ -1,1 +1,59 @@
-<p>user-view works!</p>
+<!--  Solo pintamos si el signal 'user' tiene datos -->
+@if (user()) {
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 p-5 rounded-4 bg-white">
+        <div class="row align-items-center">
+            
+            <!-- Bloque Izquierda: Imagen  -->
+            <div class="col-md-5 text-center mb-4 mb-md-0 custom-class">
+                <img [src]="user()?.image" 
+                     class="rounded-circle shadow-sm border border-4 border-light" 
+                     [alt]="user()?.first_name"
+                     style="width: 250px; height: 250px; object-fit: cover;">
+            </div>
+
+            <!-- Bloque Derecha: Información -->
+            <div class="col-md-7 ps-md-5">
+                <h2 class="display-7 fw-bold text-dark">{{ user()?.first_name }} {{ user()?.last_name }}</h2>
+                <hr class="w-25 border-primary border-3 opacity-75">
+                
+                <div class="mt-4 fs-5 text-secondary">
+                    <p class="mb-2">
+                        <span class="fw-bold text-dark">Nombre Usuario:</span> 
+                        {{ user()?.username }}
+                    </p>
+                    <p class="mb-2">
+                        <span class="fw-bold text-dark">Email:</span> 
+                        {{ user()?.email }}
+                    </p>
+                </div>
+
+                <!-- Botones de Acción  -->
+                <div class="d-flex gap-3 mt-5">
+                    <!-- Botón Eliminar (Rojo) -->
+                    <button class="btn btn-danger px-4 rounded-pill shadow-sm" (click)="btnBorrarUsuario()">
+                        Eliminar
+                    </button>
+                    
+                    <!-- Botón Actualizar (Amarillo/Naranja) -->
+                    <a [routerLink]="['/updateuser', user()?._id]" class="btn btn-warning px-4 rounded-pill shadow-sm">
+                        Actualizar
+                    </a>
+
+                    <!-- Botón Volver (Gris) -->
+                    <a [routerLink]="['/home']" class="btn btn-outline-secondary px-4 rounded-pill shadow-sm">
+                        Volver al listado
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+} @else {
+    <!-- Estado de carga -->
+    <div class="text-center mt-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Obteniendo detalles de {{ id() }}...</p>
+    </div>
+}

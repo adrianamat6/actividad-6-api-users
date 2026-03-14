@@ -1,7 +1,9 @@
 /* El gris suave de la tarjeta */
 .custom-card {
-    background-color: #f8f9fa; /* Gris muy clarito */
+    background-color: #fcfcfc; 
     transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;  
+      border-radius: 12px;       
 }
 
 /* Línea divisoria suave */
@@ -37,6 +39,7 @@
     transform: translateY(-2px);
 }
 
+/* Pero el de borrar cambia a rojo */
 .delete-action:hover {
-    color: #dc3545; /* Pero el de borrar cambia a rojo */
+    color: #dc3545; 
 }

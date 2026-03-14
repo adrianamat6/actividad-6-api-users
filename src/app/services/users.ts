@@ -15,7 +15,11 @@ export class UsersService {
   async getAll(): Promise <IUserResponse> {
   // Convertimos el Observable a Promesa y pedimos los datos
   return await lastValueFrom(this.httpClient.get<IUserResponse>(this.baseUrl));
+  }; 
+
+  async getUserById(id:string): Promise <IUser>{
+    return await lastValueFrom(this.httpClient.get<IUser>(`${this.baseUrl}/${id}`)); 
+  }
+
 }
 
-
-}
