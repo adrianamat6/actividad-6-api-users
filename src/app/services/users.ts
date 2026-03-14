@@ -7,11 +7,11 @@ import { lastValueFrom } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class Users {
+export class UsersService {
   private httpClient = inject(HttpClient);
   private baseUrl = 'https://peticiones.online/api/users'; 
 
-  
+
   async getAll(): Promise <IUserResponse> {
   // Convertimos el Observable a Promesa y pedimos los datos
   return await lastValueFrom(this.httpClient.get<IUserResponse>(this.baseUrl));
