@@ -11,8 +11,8 @@ export class UsersService {
   private httpClient = inject(HttpClient);
   private baseUrl = 'https://peticiones.online/api/users';
  
-  async getAll(): Promise<IUserResponse> {
-    return await lastValueFrom(this.httpClient.get<IUserResponse>(this.baseUrl));
+  async getAll(page: number = 1): Promise<IUserResponse> {
+    return await lastValueFrom(this.httpClient.get<IUserResponse>(`${this.baseUrl}?page=${page}`));
   }
  
   async getUserById(id: string): Promise<IUser> {

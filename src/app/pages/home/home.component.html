@@ -8,3 +8,22 @@
   }
 </div>
 
+<!-- 3. Controles de Paginación -->
+<div class="d-flex justify-content-center align-items-center gap-4 mt-5 mb-5">
+  
+  <button class="btn btn-outline-primary px-4 rounded-pill shadow-sm" 
+          (click)="paginaAnterior()" 
+          [disabled]="paginaActual() === 1">
+    ⬅️ Anterior
+  </button>
+  
+  <span class="fw-bold text-secondary">
+    Página {{ paginaActual() }} de {{ totalPaginas() }}
+  </span>
+  
+  <button class="btn btn-outline-primary px-4 rounded-pill shadow-sm" 
+          (click)="paginaSiguiente()"[disabled]="paginaActual() === totalPaginas()">
+    Siguiente ➡️
+  </button>
+  
+</div>
