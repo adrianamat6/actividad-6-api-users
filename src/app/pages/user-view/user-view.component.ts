@@ -15,10 +15,10 @@ import Swal from 'sweetalert2';
 })
 export class UserViewComponent {
 
-  // Recolector de la ruta dinamica
+  // Recoge el parámetro dinámico de la ruta (/user/:id)
   id = input<string>();  
  
-  // El objeto usuario que nos envia el servicio
+  // Datos del usuario cargado desde la API
   user = signal<IUser | null>(null);  
 
   // El servicio 
