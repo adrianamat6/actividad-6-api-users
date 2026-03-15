@@ -17,22 +17,45 @@ import Swal from 'sweetalert2';
 export class HomeComponent {
 
   userService = inject(UsersService);
-  listaUsuarios = signal<IUser[]>([]);
 
+
+  listaUsuarios = signal<IUser[]>([]);
+  paginaActual = signal<number>(1); // Guardamos la pagina
+  totalPaginas = signal<number>(1); // Guardamos el total de páginas
 
   async ngOnInit() {
-    try {
-      // El servicio debe retornar una promesa
-      const response = await this.userService.getAll();
+    // Al arrancar, cargamos la página que tenga el signal por defecto (la 1)
+    await this.cargarPagina(this.paginaActual());
+  }
 
-      // Asignamos los datos al signal creado
+  // FUNCIÓN REUTILIZABLE DE CARGA
+  async cargarPagina(page: number) {
+    try {
+      const response = await this.userService.getAll(page);
+      
+      // Actualizamos todos los signals con los datos nuevos
       this.listaUsuarios.set(response.results);
+      this.paginaActual.set(response.page);
+      this.totalPaginas.set(response.total_pages);
       
     } catch (error) {
-      // Manejo de errores 
       console.error('Error al obtener los usuarios:', error);
     }
   }
+
+  // FUNCIONES PARA LOS BOTONES DE PAGINACIÓN
+  paginaAnterior() {
+    if (this.paginaActual() > 1) {
+      this.cargarPagina(this.paginaActual() - 1);
+    }
+  }
+
+  paginaSiguiente() {
+    if (this.paginaActual() < this.totalPaginas()) {
+      this.cargarPagina(this.paginaActual() + 1);
+    }
+  }
+
 
   // FUNCION PARA BORRAR DESDE EL LISTADO
   async procesarBorrado(id: string) {
