@@ -1,1 +1,69 @@
-<p>user-form works!</p>
+<div class="product-form mt-4">
+    <h2>NUEVO USUARIO</h2>
+    
+    <form [formGroup]="userForm" (ngSubmit)="addUser()">
+
+        <!-- Nombre -->
+        <div class="form-group mb-3">
+            <label for="first_name">Nombre Usuario</label>
+            <input type="text" id="first_name" formControlName="first_name" placeholder="Introduzca nombre de usuario" class="form-control">
+
+            @if(checkError('first_name', 'required')){
+                <p class="error text-danger small">El nombre es obligatorio</p>
+            }
+            @if(checkError('first_name', 'minlength')){
+                <p class="error text-danger small">Longitud mínima de 3 caracteres</p>
+            }
+        </div>
+
+        <!-- Apellido -->
+        <div class="form-group mb-3">
+            <label for="last_name">Apellido Usuario</label>
+            <input type="text" id="last_name" formControlName="last_name" placeholder="Introduzca apellido de usuario" class="form-control">
+
+            @if(checkError('last_name', 'required')){
+                <p class="error text-danger small">El apellido es obligatorio</p>
+            }
+            @if(checkError('last_name', 'minlength')){
+                <p class="error text-danger small">Longitud mínima de 3 caracteres</p>
+            }
+        </div>
+        
+        <!-- Username -->
+        <div class="form-group mb-3">
+            <label for="username">Alias (Username)</label>
+            <input type="text" id="username" formControlName="username" placeholder="Introduzca alias" class="form-control">
+
+            @if(checkError('username', 'required')){
+                <p class="error text-danger small">El alias es obligatorio</p>
+            }
+        </div>
+
+        <!-- Email Usuario -->
+        <div class="form-group mb-3">
+            <label for="email">Email</label>
+            <input type="email" id="email" formControlName="email" placeholder="Introduzca email de usuario" class="form-control">
+            
+            @if(checkError('email', 'required')){
+                <p class="error text-danger small">El email es obligatorio</p>
+            }
+            @if(checkError('email', 'pattern')){
+                <p class="error text-danger small">El formato no es válido</p>
+            }
+        </div>
+
+        <!-- Imagen Usuario-->
+        <div class="form-group mb-4">
+            <label for="image">Imagen (URL)</label>
+            <input type="text" id="image" formControlName="image" placeholder="Introduzca ruta de la imagen" class="form-control">
+            
+            @if(checkError('image', 'required')){
+                <p class="error text-danger small">La imagen es obligatoria</p>
+            }
+        </div>         
+
+        <!-- Botón de envío -->
+        <input type="submit" class="btn-submit btn btn-primary" [disabled]="userForm.invalid" value="Guardar">
+
+    </form>
+</div>
