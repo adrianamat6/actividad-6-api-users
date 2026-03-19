@@ -46,8 +46,32 @@ export class UserFormComponent {
       return this.userForm.get(controlName)?.hasError(errorName) && this.userForm.get(controlName)?.touched;
   }
 
-  addUser() {
-    console.log("Valores del formulario:", this.userForm.value);
+  async addUser() {
+    // Comprobamos si el formulario es valido
+    if (this.userForm.invalid) return;
+
+    try {
+      const userId = this.id();
+      
+      // Copiamos los valores del formulario en una nueva variable
+      const formData = { ...this.userForm.value };
+
+      if (userId) {
+        // ACTUALIZACIÓN DE USUARIO
+        await this.userService.updateUser(userId, formData);
+        await Swal.fire('Actualizado correctamente', 'Los datos se han guardado.', 'success');
+      } else {
+        //  CREACIÓN NUEVO USUARIO
+        await this.userService.createUser(formData);
+        await Swal.fire('Creado  correctamente', 'El usuario ha sido registrado.', 'success');
+      }
+
+      // Redireccionamos a home
+      this.router.navigate(['/home']);
+
+    } catch (error) {
+      Swal.fire('Error', 'Hubo un problema al guardar los datos', 'error');
+    }
   }
 
   async ngOnInit() {
