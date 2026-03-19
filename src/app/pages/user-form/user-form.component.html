@@ -1,7 +1,7 @@
 <div class="product-form mt-4">
-    <h2>NUEVO USUARIO</h2>
+    <h2 class = "mb-4">{{ tituloFormulario }}</h2>
     
-    <form [formGroup]="userForm" (ngSubmit)="addUser()">
+    <form [formGroup]="userForm" (ngSubmit)="addUser()" class = "ms-5 w-50">
 
         <!-- Nombre -->
         <div class="form-group mb-3">
@@ -57,13 +57,13 @@
             <label for="image">Imagen (URL)</label>
             <input type="text" id="image" formControlName="image" placeholder="Introduzca ruta de la imagen" class="form-control">
             
-            @if(checkError('image', 'required')){
-                <p class="error text-danger small">La imagen es obligatoria</p>
+            @if(checkError('image', 'pattern')){
+                <p class="error text-danger small">Debe ser una URL válida (http:// o https://)</p>
             }
         </div>         
 
         <!-- Botón de envío -->
-        <input type="submit" class="btn-submit btn btn-primary" [disabled]="userForm.invalid" value="Guardar">
+        <input type="submit" class="btn-submit btn btn-primary" [disabled]="userForm.invalid" [value]="textoBoton">
 
     </form>
 </div>
