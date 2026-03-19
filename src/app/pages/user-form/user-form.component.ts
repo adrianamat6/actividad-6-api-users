@@ -47,11 +47,11 @@ export class UserFormComponent {
   }
 
   async addUser() {
-    // Comprobamos si el formulario es valido
+    // Si hay errores, no enviamos
     if (this.userForm.invalid) return;
 
     try {
-      const userId = this.id();
+      const userId = this.id(); // Miramos si hay ID en la URL
       
       // Copiamos los valores del formulario en una nueva variable
       const formData = { ...this.userForm.value };
