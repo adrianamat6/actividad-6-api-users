@@ -11,27 +11,31 @@
 <!-- 3. Controles de Paginación -->
 <div class="d-flex justify-content-center align-items-center gap-4 mt-5 mb-5">
   
-   <div class="btn btn-outline-primary px-4 rounded-pill shadow-sm d-flex align-items-center gap-2">
-      <span class="material-symbols-outlined" style="font-size: 20px;">arrow_left_alt</span>
-      <button (click)="paginaAnterior()" 
-              [disabled]="paginaActual() === 1"
-              class="border-0 bg-transparent p-0" 
-              style="color: inherit; font-weight: inherit;">
-        Anterior
-      </button>
-  </div>
+  <!-- BOTÓN ANTERIOR -->
+  <button 
+    class="btn btn-outline-primary px-4 rounded-pill shadow-sm d-flex align-items-center gap-2"
+    (click)="paginaAnterior()" 
+    [disabled]="paginaActual() === 1">
+    
+    <span class="material-symbols-outlined" style="font-size: 20px;">arrow_left_alt</span>
+    <span>Anterior</span>
 
+  </button>
+
+  <!-- TEXTO CENTRAL con información de pagina -->
   <span class="fw-bold text-secondary">
     Página {{ paginaActual() }} de {{ totalPaginas() }}
   </span>
   
-  <div class="btn btn-outline-primary px-4 rounded-pill shadow-sm d-flex align-items-center gap-2">
-    <button (click)="paginaSiguiente()" 
-            [disabled]="paginaActual() === totalPaginas()"
-            class="border-0 bg-transparent p-0" 
-            style="color: inherit; font-weight: inherit;">
-      Siguiente
-    </button>
+  <!-- BOTÓN SIGUIENTE -->
+  <button 
+    class="btn btn-outline-primary px-4 rounded-pill shadow-sm d-flex align-items-center gap-2"
+    (click)="paginaSiguiente()" 
+    [disabled]="paginaActual() === totalPaginas()">
+    
+    <span>Siguiente</span>
     <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right_alt</span>
+
+  </button>
   
 </div>
