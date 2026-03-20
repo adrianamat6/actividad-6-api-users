@@ -11,19 +11,27 @@
 <!-- 3. Controles de Paginación -->
 <div class="d-flex justify-content-center align-items-center gap-4 mt-5 mb-5">
   
-  <button class="btn btn-outline-primary px-4 rounded-pill shadow-sm" 
-          (click)="paginaAnterior()" 
-          [disabled]="paginaActual() === 1">
-    ⬅️ Anterior
-  </button>
-  
+   <div class="btn btn-outline-primary px-4 rounded-pill shadow-sm d-flex align-items-center gap-2">
+      <span class="material-symbols-outlined" style="font-size: 20px;">arrow_left_alt</span>
+      <button (click)="paginaAnterior()" 
+              [disabled]="paginaActual() === 1"
+              class="border-0 bg-transparent p-0" 
+              style="color: inherit; font-weight: inherit;">
+        Anterior
+      </button>
+  </div>
+
   <span class="fw-bold text-secondary">
     Página {{ paginaActual() }} de {{ totalPaginas() }}
   </span>
   
-  <button class="btn btn-outline-primary px-4 rounded-pill shadow-sm" 
-          (click)="paginaSiguiente()"[disabled]="paginaActual() === totalPaginas()">
-    Siguiente ➡️
-  </button>
+  <div class="btn btn-outline-primary px-4 rounded-pill shadow-sm d-flex align-items-center gap-2">
+    <button (click)="paginaSiguiente()" 
+            [disabled]="paginaActual() === totalPaginas()"
+            class="border-0 bg-transparent p-0" 
+            style="color: inherit; font-weight: inherit;">
+      Siguiente
+    </button>
+    <span class="material-symbols-outlined" style="font-size: 20px;">arrow_right_alt</span>
   
 </div>
