@@ -7,17 +7,17 @@
         <div class="d-flex justify-content-around mt-4 pt-3 border-top border-secondary border-opacity-25">
             
             <a [routerLink]="['/user', user()?._id]" class="card-action">
-                <span class="icon">🔍</span>
+                <span class="material-symbols-outlined icon">search</span>
                 <small>Ver detalle</small>
             </a>
 
             <a [routerLink]="['/updateuser', user()?._id]" class="card-action">
-                <span class="icon">🔄</span>
+                 <span class="material-symbols-outlined icon">autorenew</span>
                 <small>Actualizar</small>
             </a>
 
            <a class="card-action delete-action" (click)="onBorrarClick()">
-                <span class="icon">🗑️</span>
+                <span class="material-symbols-outlined icon">delete</span>
                 <small>Borrar</small>
             </a>
 
