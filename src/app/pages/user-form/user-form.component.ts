@@ -1,13 +1,9 @@
-import { Component } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { Validators } from '@angular/forms';
-import { FormControl } from '@angular/forms';
-import Swal from 'sweetalert2';
+import { Component, input, inject, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { IUser } from '../../interfaces/iuser.interface';
+import { Router, RouterLink } from '@angular/router';
 import { UsersService } from '../../services/users';
-import { Router } from '@angular/router';
-import { input } from '@angular/core';
-import { inject } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-form',
@@ -24,14 +20,15 @@ export class UserFormComponent {
 
 
   // Variables dinámicas
+  isUpdating: boolean = false; // true = actualizando o  false = creando nuevo usuario
   tituloFormulario: string = 'NUEVO USUARIO'; 
   textoBoton: string = 'Guardar'; 
 
   // Formulario 
   userForm: FormGroup; 
   urlPattern: string = '^(http|https)://.*$';
-
   emailPattern: string = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
+
   constructor(){
     this.userForm = new FormGroup( {
       first_name: new FormControl('', [Validators.required, Validators.minLength(3)] ), 
@@ -42,57 +39,81 @@ export class UserFormComponent {
     })
   }
 
-    checkError(controlName: string, errorName: string): boolean | undefined {
-      return this.userForm.get(controlName)?.hasError(errorName) && this.userForm.get(controlName)?.touched;
+  // funcion auxiliar para el formulario
+  checkError(controlName: string, errorName: string): boolean | undefined {
+    return this.userForm.get(controlName)?.hasError(errorName) && this.userForm.get(controlName)?.touched;
   }
 
-  async addUser() {
-    // Si hay errores, no enviamos
-    if (this.userForm.invalid) return;
 
-    try {
-      const userId = this.id(); // Miramos si hay ID en la URL
-      
-      // Copiamos los valores del formulario en una nueva variable
-      const formData = { ...this.userForm.value };
 
-      if (userId) {
-        // ACTUALIZACIÓN DE USUARIO
-        await this.userService.updateUser(userId, formData);
-        await Swal.fire('Actualizado correctamente', 'Los datos se han guardado.', 'success');
-      } else {
-        //  CREACIÓN NUEVO USUARIO
-        await this.userService.createUser(formData);
-        await Swal.fire('Creado  correctamente', 'El usuario ha sido registrado.', 'success');
-      }
-
-      // Redireccionamos a home
-      this.router.navigate(['/home']);
-
-    } catch (error) {
-      Swal.fire('Error', 'Hubo un problema al guardar los datos', 'error');
-    }
-  }
-
+  /**
+   * Inicialización: Detecta si el formulario es para crear o editar
+   * basándose en si existe un ID en los parámetros de la ruta.
+   */  
   async ngOnInit() {
     const userId = this.id();
     
-    // Si viene un ID por la ruta, es que estamos actualizando
+    // Si hay ID, configuramos la interfaz en modo Actualizar
     if (userId) {
+      this.isUpdating = true;
       this.tituloFormulario = 'ACTUALIZAR USUARIO';
       this.textoBoton = 'Actualizar';
 
-      try {
-        // Pedimos los datos del usuario a la API
-        const userToEdit = await this.userService.getUserById(userId);
-        
-        if (userToEdit) {
-          // Rellenamos el formulario de golpe con los datos de la API
-          this.userForm.patchValue(userToEdit);
-        }
-      } catch (error) {
-        console.error('Error al cargar el usuario para editar', error);
-      }
+      // Cargamos los datos del usuario para rellenar el formulario
+      await this.loadUserData(userId);
     }
   }
+
+
+
+  /**
+   * Procesa el envío del formulario. Decide si debe crear un
+   * nuevo registro o actualizar uno existente.
+   */
+  async addUser() {
+    if (this.userForm.invalid) return;
+
+    const formData = { ...this.userForm.value };
+    try {
+      if (this.isUpdating) {
+        // Lógica de actualización
+        await this.updateExistingUser(formData);
+      } else {
+        // Lógica de creación
+        await this.createNewUser(formData);
+      }
+      this.router.navigate(['/home']);
+      
+    } catch (error) {
+      Swal.fire('Error', 'Hubo un problema al procesar la solicitud', 'error');
+    }
+  }
+
+  // --- MÉTODOS DE APOYO ----
+  // Pide los datos de un usuario a la API y los inyecta en el formulario
+  async loadUserData(userId: string) {
+    try {
+      const userToEdit = await this.userService.getUserById(userId);
+      if (userToEdit) {
+        this.userForm.patchValue(userToEdit);
+      }
+    } catch (error) {
+      console.error('Error al recuperar el usuario:', error);
+    }
+  }
+ // Llama al servicio para registrar un nuevo usuario 
+  async createNewUser(data: IUser) {
+    await this.userService.createUser(data);
+    await Swal.fire('Creado correctamente', 'El usuario ha sido registrado.', 'success');
+  }
+
+  // Llama al servicio para actualizar los datos de un servicio existente
+  async updateExistingUser(data: IUser) {
+    const userId = this.id(); // Obtenemos el ID de la señal
+    if (userId) {
+      await this.userService.updateUser(userId, data);
+      await Swal.fire('Actualizado correctamente', 'Los datos se han guardado.', 'success');
+    }
+  }
+
 }
