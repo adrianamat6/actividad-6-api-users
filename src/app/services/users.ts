@@ -11,23 +11,23 @@ export class UsersService {
   private httpClient = inject(HttpClient);
   private baseUrl = 'https://peticiones.online/api/users';
  
-  async getAll(page: number = 1): Promise<IUserResponse> {
-    return await lastValueFrom(this.httpClient.get<IUserResponse>(`${this.baseUrl}?page=${page}`));
+  getAll(page: number = 1): Promise<IUserResponse> {
+    return  lastValueFrom(this.httpClient.get<IUserResponse>(`${this.baseUrl}?page=${page}`));
   }
  
-  async getUserById(id: string): Promise<IUser> {
-    return await lastValueFrom(this.httpClient.get<IUser>(`${this.baseUrl}/${id}`));
+  getUserById(id: string): Promise<IUser> {
+    return  lastValueFrom(this.httpClient.get<IUser>(`${this.baseUrl}/${id}`));
   }
  
-  async deleteUserById(id: string): Promise<any> {
-    return await lastValueFrom(this.httpClient.delete<any>(`${this.baseUrl}/${id}`));
+  deleteUserById(id: string): Promise<any> {
+    return  lastValueFrom(this.httpClient.delete<any>(`${this.baseUrl}/${id}`));
   }
  
-  async createUser(user: Omit<IUser, '_id' | 'id'>): Promise<IUser> {
-    return await lastValueFrom(this.httpClient.post<IUser>(this.baseUrl, user));
+  createUser(user: IUser): Promise<IUser> {
+    return  lastValueFrom(this.httpClient.post<IUser>(this.baseUrl, user));
   }
  
-  async updateUser(id: string, user: Omit<IUser, '_id' | 'id'>): Promise<IUser> {
-    return await lastValueFrom(this.httpClient.put<IUser>(`${this.baseUrl}/${id}`, user));
+  updateUser(id: string, user: IUser): Promise<IUser> {
+    return  lastValueFrom(this.httpClient.put<IUser>(`${this.baseUrl}/${id}`, user));
   }
 }
