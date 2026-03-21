@@ -3,14 +3,13 @@ import { inject } from '@angular/core';
 import { UsersService } from '../../services/users';
 import { IUser, IUserResponse } from '../../interfaces/iuser.interface';
 import { signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { UserCardComponent } from '../../components/user-card/user-card.component';
 import Swal from 'sweetalert2';
 
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, UserCardComponent],
+  imports: [UserCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

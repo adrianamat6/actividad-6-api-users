@@ -78,10 +78,7 @@ export class UserViewComponent {
   // Función responsable de llamar al servicio y redireccionar
   private async ejecutarBorrado(id: string) {
     try {
-     const response =  await this.userSevice.deleteUserById(id);
-
-      console.log('Respuesta de la API al borrar:',response)
-      
+     const response =  await this.userSevice.deleteUserById(id);      
       // Feedback de éxito
       await Swal.fire('¡Eliminado!', 'El usuario ha sido borrado con éxito.', 'success');
       
